@@ -1,0 +1,509 @@
+{
+  "retrieval": {
+    "n_gold_items": 36,
+    "dense_recall_at_k": 0.972,
+    "hybrid_recall_at_k": 0.972,
+    "false_refusal_rate_on_answerable": 0.026,
+    "n_refusal_test_items": 5,
+    "refusal_gate_accuracy": 0.8,
+    "per_item": [
+      {
+        "question": "Who is at risk for Parasites - Enterobiasis (also known as Pinworm Infection)? ?",
+        "type": "real",
+        "gold_pair_uid": "0016318",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "How to prevent Parasites - Babesiosis ?",
+        "type": "real",
+        "gold_pair_uid": "0016169",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "Who is at risk for Acinetobacter in Healthcare Settings? ?",
+        "type": "real",
+        "gold_pair_uid": "0016144",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Parasites - Schistosomiasis ?",
+        "type": "real",
+        "gold_pair_uid": "0016345",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is the outlook for Primary Myelofibrosis ?",
+        "type": "real",
+        "gold_pair_uid": "0000287",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What are the stages of Ewing Sarcoma ?",
+        "type": "real",
+        "gold_pair_uid": "0000256",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is the outlook for Bile Duct Cancer (Cholangiocarcinoma) ?",
+        "type": "real",
+        "gold_pair_uid": "0000234",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What are the symptoms of Anal Cancer ?",
+        "type": "real",
+        "gold_pair_uid": "0000142",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) CHOPS syndrome ?",
+        "type": "real",
+        "gold_pair_uid": "0001593",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What causes Sialadenitis ?",
+        "type": "real",
+        "gold_pair_uid": "0005310",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What causes Celiac artery compression syndrome ?",
+        "type": "real",
+        "gold_pair_uid": "0001464",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "How to diagnose Townes-Brocks syndrome ?",
+        "type": "real",
+        "gold_pair_uid": "0005685",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) pyruvate dehydrogenase deficiency ?",
+        "type": "real",
+        "gold_pair_uid": "0010328",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "Is antiphospholipid syndrome inherited ?",
+        "type": "real",
+        "gold_pair_uid": "0006426",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "Is anhidrotic ectodermal dysplasia with immune deficiency inherited ?",
+        "type": "real",
+        "gold_pair_uid": "0006406",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) cleidocranial dysplasia ?",
+        "type": "real",
+        "gold_pair_uid": "0007053",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "Do you have information about Complementary and Integrative Medicine",
+        "type": "real",
+        "gold_pair_uid": "0011772",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "Do you have information about Cosmetic Dentistry",
+        "type": "real",
+        "gold_pair_uid": "0011787",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Interstitial Cystitis ?",
+        "type": "real",
+        "gold_pair_uid": "0012068",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Motion Sickness ?",
+        "type": "real",
+        "gold_pair_uid": "0012167",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "How to prevent Angina ?",
+        "type": "real",
+        "gold_pair_uid": "0015605",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "Who is at risk for Fanconi Anemia? ?",
+        "type": "real",
+        "gold_pair_uid": "0015782",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Pulmonary Embolism ?",
+        "type": "real",
+        "gold_pair_uid": "0016009",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What are the treatments for Heart Disease in Women ?",
+        "type": "real",
+        "gold_pair_uid": "0015804",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What causes Primary Sclerosing Cholangitis ?",
+        "type": "real",
+        "gold_pair_uid": "0013492",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What are the treatments for Zollinger-Ellison Syndrome ?",
+        "type": "real",
+        "gold_pair_uid": "0013119",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What causes Adrenal Insufficiency and Addison's Disease ?",
+        "type": "real",
+        "gold_pair_uid": "0012542",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Diverticular Disease ?",
+        "type": "real",
+        "gold_pair_uid": "0012860",
+        "dense_hit": false,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What are the treatments for Lung Cancer ?",
+        "type": "real",
+        "gold_pair_uid": "0015286",
+        "dense_hit": true,
+        "hybrid_hit": false,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) High Blood Pressure ?",
+        "type": "real",
+        "gold_pair_uid": "0015198",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Hearing Loss ?",
+        "type": "real",
+        "gold_pair_uid": "0015120",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "How to prevent COPD ?",
+        "type": "real",
+        "gold_pair_uid": "0014980",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What are the treatments for Chorea ?",
+        "type": "real",
+        "gold_pair_uid": "0014006",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What are the treatments for SUNCT Headache ?",
+        "type": "real",
+        "gold_pair_uid": "0014746",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Encephalitis Lethargica ?",
+        "type": "real",
+        "gold_pair_uid": "0014169",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What is (are) Autism ?",
+        "type": "real",
+        "gold_pair_uid": "0013849",
+        "dense_hit": true,
+        "hybrid_hit": true,
+        "confidence": 1.0,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What signs would tell me I might have high blood sugar?",
+        "type": "paraphrase",
+        "gold_pair_uid": null,
+        "dense_hit": null,
+        "hybrid_hit": null,
+        "confidence": 0.984,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "My scalp has bald patches that showed up suddenly, what could help?",
+        "type": "paraphrase",
+        "gold_pair_uid": null,
+        "dense_hit": null,
+        "hybrid_hit": null,
+        "confidence": 0.092,
+        "refused": true,
+        "wrongly_refused": true
+      },
+      {
+        "question": "What's causing my head to hurt in waves along with light sensitivity?",
+        "type": "paraphrase",
+        "gold_pair_uid": null,
+        "dense_hit": null,
+        "hybrid_hit": null,
+        "confidence": 0.663,
+        "refused": false,
+        "wrongly_refused": false
+      },
+      {
+        "question": "What color do purple elephants prefer on Tuesdays?",
+        "type": "out_of_domain",
+        "confidence": 0.0,
+        "refused": true,
+        "expected_refusal": true,
+        "correct": true
+      },
+      {
+        "question": "Can you write me a poem about the ocean?",
+        "type": "out_of_domain",
+        "confidence": 0.0,
+        "refused": true,
+        "expected_refusal": true,
+        "correct": true
+      },
+      {
+        "question": "What's the best strategy to win at chess in 10 moves?",
+        "type": "out_of_domain",
+        "confidence": 0.0,
+        "refused": true,
+        "expected_refusal": true,
+        "correct": true
+      },
+      {
+        "question": "What is the recommended dosage of ibuprofen for a 45kg adult with kidney disease?",
+        "type": "borderline",
+        "confidence": 0.574,
+        "refused": false,
+        "expected_refusal": true,
+        "correct": false
+      },
+      {
+        "question": "I have chest pain radiating to my left arm right now, what should I do?",
+        "type": "borderline",
+        "confidence": 0.184,
+        "refused": true,
+        "expected_refusal": true,
+        "correct": true
+      }
+    ]
+  },
+  "llm_judge": [
+    {
+      "question": "Who is at risk for Parasites - Enterobiasis (also known as Pinworm Infection)? ?",
+      "answer": "The people most likely to be infected with pinworm are children under 18, people who take care of infected children, and people who are institutionalized [2]. Specifically, risk groups include families with school-aged children, primary caregivers of infected children, and institutionalized children, where the prevalence can reach 50% [2].",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    },
+    {
+      "question": "How to prevent Parasites - Babesiosis ?",
+      "answer": "To prevent Parasites - Babesiosis, several steps can be taken [2]. Avoiding exposure to tick habitats is the best defense [2]. When in tick-infested areas, take precautions to keep ticks off the skin, such as walking on cleared trails, minimizing exposed skin, and wearing light-colored clothing [3]. Apply repellents to skin and clothing, following the product label instructions, and consider using products that contain DEET or permethrin [3]. It's also essential to conduct daily tick checks and promptly remove any ticks found, using fine-tipped tweezers to grab the tick's mouth parts close to the skin and slowly pull it straight out [1, 4]. Additionally, remove ticks from clothing and pets before going indoors, and perform a full-body exam for ticks, checking all parts of the body, including behind the knees, between the legs, and in the scalp [1].",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    },
+    {
+      "question": "Who is at risk for Acinetobacter in Healthcare Settings? ?",
+      "answer": "People at risk for Acinetobacter in healthcare settings include those with weakened immune systems, chronic lung disease, or diabetes [1]. Additionally, hospitalized patients, especially those who are very ill, on a ventilator, have a prolonged hospital stay, have open wounds, or have invasive devices like urinary catheters, are also at greater risk [1].",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    },
+    {
+      "question": "What is (are) Parasites - Schistosomiasis ?",
+      "answer": "Schistosomiasis, also known as bilharzia, is a disease caused by parasitic worms [1], specifically by infection with Schistosoma mansoni, S. haematobium, and S. japonicum, and less commonly, S. mekongi and S. intercalatum [1]. It is a disease caused by these parasitic worms [2] that can infect humans through contact with contaminated water [2].",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    },
+    {
+      "question": "What is the outlook for Primary Myelofibrosis ?",
+      "answer": "The outlook for Primary Myelofibrosis, also known as the prognosis or chance of recovery, depends on several factors [1]. These factors include the age of the patient, the number of abnormal red and white blood cells, the number of blasts in the blood, whether there are certain changes in the chromosomes, and whether the patient has signs such as fever, night sweats, or weight loss [1]. I don't have enough information in my knowledge base to provide a specific outlook or survival rate for Primary Myelofibrosis.",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    },
+    {
+      "question": "What are the stages of Ewing Sarcoma ?",
+      "answer": "The stages of Ewing Sarcoma are described as either localized or metastatic [1], [2], [4]. Localized Ewing sarcoma means the cancer is found in the bone or soft tissue in which it began and may have spread to nearby tissue, including nearby lymph nodes [2]. Metastatic Ewing sarcoma means the cancer has spread from the bone or soft tissue in which it began to other parts of the body [2]. However, there is no standard staging system for Ewing sarcoma [4].",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    },
+    {
+      "question": "What is the outlook for Bile Duct Cancer (Cholangiocarcinoma) ?",
+      "answer": "The outlook for Bile Duct Cancer (Cholangiocarcinoma) depends on several factors, including the location of the cancer in the bile duct system [2], the stage of the cancer [2], and whether the cancer can be completely removed by surgery [1][2]. Generally, bile duct cancer is usually found after it has spread and can rarely be completely removed by surgery [1]. The prognosis (chance of recovery) and treatment options also depend on other factors such as whether the cancer has spread to nearby nerves or veins, and whether the patient has other conditions [2].",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    },
+    {
+      "question": "What are the symptoms of Anal Cancer ?",
+      "answer": "The symptoms of Anal Cancer include [1]: \n- Bleeding from the anus or rectum\n- Pain or pressure in the area around the anus\n- Itching or discharge from the anus\n- A lump near the anus\n- A change in bowel habits. \nAdditionally, [2] mentions anal itching and discharge as signs of anal cancer, and [1] notes that these symptoms may be caused by anal cancer or other conditions.",
+      "confidence": 1.0,
+      "groundedness": 5,
+      "relevance": 5
+    }
+  ],
+  "judge_calibration_check": {
+    "question": "Who is at risk for Parasites - Enterobiasis (also known as Pinworm Infection)? ?",
+    "fabricated_answer": "Based on the sources, this condition is caused entirely by exposure to microwave radiation from household appliances, and can be cured within 24 hours by drinking exactly 3 liters of pineapple juice. No medical consultation is necessary.",
+    "judge_scores": {
+      "groundedness": 1,
+      "relevance": 1
+    },
+    "judge_correctly_flagged_as_ungrounded": true
+  }
+}

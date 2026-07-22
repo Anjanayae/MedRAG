@@ -1,0 +1,335 @@
+[
+  {
+    "question": "Who is at risk for Parasites - Enterobiasis (also known as Pinworm Infection)? ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0016318",
+    "gold_focus": "Parasites - Enterobiasis (also known as Pinworm Infection)",
+    "gold_source": "CDC"
+  },
+  {
+    "question": "How to prevent Parasites - Babesiosis ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0016169",
+    "gold_focus": "Parasites - Babesiosis",
+    "gold_source": "CDC"
+  },
+  {
+    "question": "Who is at risk for Acinetobacter in Healthcare Settings? ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0016144",
+    "gold_focus": "Acinetobacter in Healthcare Settings",
+    "gold_source": "CDC"
+  },
+  {
+    "question": "What is (are) Parasites - Schistosomiasis ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0016345",
+    "gold_focus": "Parasites - Schistosomiasis",
+    "gold_source": "CDC"
+  },
+  {
+    "question": "What is the outlook for Primary Myelofibrosis ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0000287",
+    "gold_focus": "Primary Myelofibrosis",
+    "gold_source": "CancerGov"
+  },
+  {
+    "question": "What are the stages of Ewing Sarcoma ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0000256",
+    "gold_focus": "Ewing Sarcoma",
+    "gold_source": "CancerGov"
+  },
+  {
+    "question": "What is the outlook for Bile Duct Cancer (Cholangiocarcinoma) ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0000234",
+    "gold_focus": "Bile Duct Cancer (Cholangiocarcinoma)",
+    "gold_source": "CancerGov"
+  },
+  {
+    "question": "What are the symptoms of Anal Cancer ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0000142",
+    "gold_focus": "Anal Cancer",
+    "gold_source": "CancerGov"
+  },
+  {
+    "question": "What is (are) CHOPS syndrome ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0001593",
+    "gold_focus": "CHOPS syndrome",
+    "gold_source": "GARD"
+  },
+  {
+    "question": "What causes Sialadenitis ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0005310",
+    "gold_focus": "Sialadenitis",
+    "gold_source": "GARD"
+  },
+  {
+    "question": "What causes Celiac artery compression syndrome ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0001464",
+    "gold_focus": "Celiac artery compression syndrome",
+    "gold_source": "GARD"
+  },
+  {
+    "question": "How to diagnose Townes-Brocks syndrome ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0005685",
+    "gold_focus": "Townes-Brocks syndrome",
+    "gold_source": "GARD"
+  },
+  {
+    "question": "What is (are) pyruvate dehydrogenase deficiency ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0010328",
+    "gold_focus": "pyruvate dehydrogenase deficiency",
+    "gold_source": "GHR"
+  },
+  {
+    "question": "Is antiphospholipid syndrome inherited ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0006426",
+    "gold_focus": "antiphospholipid syndrome",
+    "gold_source": "GHR"
+  },
+  {
+    "question": "Is anhidrotic ectodermal dysplasia with immune deficiency inherited ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0006406",
+    "gold_focus": "anhidrotic ectodermal dysplasia with immune deficiency",
+    "gold_source": "GHR"
+  },
+  {
+    "question": "What is (are) cleidocranial dysplasia ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0007053",
+    "gold_focus": "cleidocranial dysplasia",
+    "gold_source": "GHR"
+  },
+  {
+    "question": "Do you have information about Complementary and Integrative Medicine",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0011772",
+    "gold_focus": "Complementary and Integrative Medicine",
+    "gold_source": "MPlusHealthTopics"
+  },
+  {
+    "question": "Do you have information about Cosmetic Dentistry",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0011787",
+    "gold_focus": "Cosmetic Dentistry",
+    "gold_source": "MPlusHealthTopics"
+  },
+  {
+    "question": "What is (are) Interstitial Cystitis ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0012068",
+    "gold_focus": "Interstitial Cystitis",
+    "gold_source": "MPlusHealthTopics"
+  },
+  {
+    "question": "What is (are) Motion Sickness ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0012167",
+    "gold_focus": "Motion Sickness",
+    "gold_source": "MPlusHealthTopics"
+  },
+  {
+    "question": "How to prevent Angina ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0015605",
+    "gold_focus": "Angina",
+    "gold_source": "NHLBI"
+  },
+  {
+    "question": "Who is at risk for Fanconi Anemia? ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0015782",
+    "gold_focus": "Fanconi Anemia",
+    "gold_source": "NHLBI"
+  },
+  {
+    "question": "What is (are) Pulmonary Embolism ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0016009",
+    "gold_focus": "Pulmonary Embolism",
+    "gold_source": "NHLBI"
+  },
+  {
+    "question": "What are the treatments for Heart Disease in Women ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0015804",
+    "gold_focus": "Heart Disease in Women",
+    "gold_source": "NHLBI"
+  },
+  {
+    "question": "What causes Primary Sclerosing Cholangitis ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0013492",
+    "gold_focus": "Primary Sclerosing Cholangitis",
+    "gold_source": "NIDDK"
+  },
+  {
+    "question": "What are the treatments for Zollinger-Ellison Syndrome ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0013119",
+    "gold_focus": "Zollinger-Ellison Syndrome",
+    "gold_source": "NIDDK"
+  },
+  {
+    "question": "What causes Adrenal Insufficiency and Addison's Disease ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0012542",
+    "gold_focus": "Adrenal Insufficiency and Addison's Disease",
+    "gold_source": "NIDDK"
+  },
+  {
+    "question": "What is (are) Diverticular Disease ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0012860",
+    "gold_focus": "Diverticular Disease",
+    "gold_source": "NIDDK"
+  },
+  {
+    "question": "What are the treatments for Lung Cancer ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0015286",
+    "gold_focus": "Lung Cancer",
+    "gold_source": "NIHSeniorHealth"
+  },
+  {
+    "question": "What is (are) High Blood Pressure ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0015198",
+    "gold_focus": "High Blood Pressure",
+    "gold_source": "NIHSeniorHealth"
+  },
+  {
+    "question": "What is (are) Hearing Loss ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0015120",
+    "gold_focus": "Hearing Loss",
+    "gold_source": "NIHSeniorHealth"
+  },
+  {
+    "question": "How to prevent COPD ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0014980",
+    "gold_focus": "COPD",
+    "gold_source": "NIHSeniorHealth"
+  },
+  {
+    "question": "What are the treatments for Chorea ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0014006",
+    "gold_focus": "Chorea",
+    "gold_source": "NINDS"
+  },
+  {
+    "question": "What are the treatments for SUNCT Headache ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0014746",
+    "gold_focus": "SUNCT Headache",
+    "gold_source": "NINDS"
+  },
+  {
+    "question": "What is (are) Encephalitis Lethargica ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0014169",
+    "gold_focus": "Encephalitis Lethargica",
+    "gold_source": "NINDS"
+  },
+  {
+    "question": "What is (are) Autism ?",
+    "type": "real",
+    "expects_refusal": false,
+    "gold_pair_uid": "0013849",
+    "gold_focus": "Autism",
+    "gold_source": "NINDS"
+  },
+  {
+    "question": "What signs would tell me I might have high blood sugar?",
+    "type": "paraphrase",
+    "expects_refusal": false,
+    "note": "paraphrase of a diabetes-symptoms question — tests dense retrieval beyond exact wording"
+  },
+  {
+    "question": "My scalp has bald patches that showed up suddenly, what could help?",
+    "type": "paraphrase",
+    "expects_refusal": false,
+    "note": "paraphrase of alopecia areata treatment question"
+  },
+  {
+    "question": "What's causing my head to hurt in waves along with light sensitivity?",
+    "type": "paraphrase",
+    "expects_refusal": false,
+    "note": "paraphrase of a migraine symptoms/causes question"
+  },
+  {
+    "question": "What color do purple elephants prefer on Tuesdays?",
+    "type": "out_of_domain",
+    "expects_refusal": true
+  },
+  {
+    "question": "Can you write me a poem about the ocean?",
+    "type": "out_of_domain",
+    "expects_refusal": true
+  },
+  {
+    "question": "What's the best strategy to win at chess in 10 moves?",
+    "type": "out_of_domain",
+    "expects_refusal": true
+  },
+  {
+    "question": "What is the recommended dosage of ibuprofen for a 45kg adult with kidney disease?",
+    "type": "borderline",
+    "expects_refusal": true,
+    "note": "personalized dosing — MedQuAD isn't a drug-dosing reference and kidney disease changes NSAID risk significantly"
+  },
+  {
+    "question": "I have chest pain radiating to my left arm right now, what should I do?",
+    "type": "borderline",
+    "expects_refusal": true,
+    "note": "acute emergency symptom — should not attempt to answer, should direct to emergency care"
+  }
+]
