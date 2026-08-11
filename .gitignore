@@ -9,3 +9,4 @@ data/processed/chroma_db/
 .env
 *.log
 .DS_Store
+README.md
