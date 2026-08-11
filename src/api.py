@@ -31,7 +31,17 @@ async def lifespan(app: FastAPI):
     global _retriever
     # Loaded once at startup (embedding model + BM25 index are not cheap to
     # reload per-request) rather than per-request in the endpoint.
+    print("Loading MedRAG retriever (embedding model, Chroma index, BM25 index)...")
     _retriever = HybridRetriever(strategy=DEFAULT_STRATEGY)
+    # Force the embedding model AND the cross-encoder reranker to load now,
+    # not on the first real user query. Both are lazy-loaded on first use
+    # (see embed.py / reranker.py) — without this, the first person to hit
+    # /query pays the full "load two ~90MB models + import torch" cost
+    # inline with their request, which is what turned a normal sub-second
+    # retrieval into an observed ~43-second one.
+    print("Warming up reranker (loading cross-encoder model)...")
+    _retriever.warmup()
+    print("MedRAG ready.")
     yield
     _retriever = None
 

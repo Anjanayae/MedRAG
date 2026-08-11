@@ -16,6 +16,6 @@ groq==1.5.0
 python-dotenv==1.2.2
 httpx==0.28.1
 
-# --- Step 5+ (installed as we get there): ---
-# ragas                   # RAG evaluation
-# streamlit
+# --- Step 8: frontend ---
+streamlit==1.60.0
+requests

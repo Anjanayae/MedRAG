@@ -14,12 +14,37 @@ A chunk ranked #1 in both lists scores higher than one ranked #1 in only
 one list — no tuning needed, and it's the standard approach used in
 production hybrid search (Elasticsearch, Azure AI Search, Weaviate all
 implement this).
+
+Per-stage timing: set env var MEDRAG_DEBUG_TIMING=1 to print how long each
+stage (query rewrite, dense retrieve, sparse retrieve, fusion, rerank)
+takes. Added after a real slow-query report (~43s per query) — the
+embedding model and cross-encoder reranker are lazy-loaded on first use
+(see embed.py's get_model() / reranker.py's get_reranker()), so a query
+landing on a cold process pays the full "load two ~90MB models from disk +
+import torch" cost inline with that one request, which looks like a
+retrieval bug but isn't. warmup() below exists to pay that cost once at
+server startup instead.
 """
 
 from __future__ import annotations
 
+import os
+import time
+
 from retriever import DenseRetriever, RetrievedChunk
 from sparse_retriever import BM25Retriever
+
+_DEBUG_TIMING = os.environ.get("MEDRAG_DEBUG_TIMING", "0") == "1"
+
+
+def _log_timing(label: str, elapsed_s: float) -> None:
+    if _DEBUG_TIMING:
+        print(f"[hybrid_retriever] {label}: {elapsed_s * 1000:.1f}ms")
+
+
+def _log_timing_note(note: str) -> None:
+    if _DEBUG_TIMING:
+        print(f"[hybrid_retriever] {note}")
 
 
 def reciprocal_rank_fusion(
@@ -66,36 +91,62 @@ class HybridRetriever:
         candidate_k: int = 20,
         rrf_k: int = 60,
         use_reranker: bool = True,
+        use_query_rewrite: bool = True,
     ) -> list[RetrievedChunk]:
         """
         candidate_k: how many results each retriever contributes before fusion
                      (wider net than the final top_k so the reranker has
                      enough good candidates to choose from).
         top_k: final number of chunks returned after fusion (+ rerank).
+        use_query_rewrite: normalize colloquial phrasing (e.g. "hairfall")
+                     into clinical terms before retrieval — see
+                     query_rewrite.py. Only affects what's searched with;
+                     generation.py still receives the user's original
+                     wording, so answers stay in the user's own terms.
         """
-        dense_results = self.dense.retrieve(query, top_k=candidate_k)
-        sparse_results = self.sparse.retrieve(query, top_k=candidate_k)
+        search_query = query
+        if use_query_rewrite:
+            from query_rewrite import rewrite_query
+            t_rw = time.perf_counter()
+            search_query = rewrite_query(query)
+            _log_timing("query rewrite", time.perf_counter() - t_rw)
+            if search_query != query:
+                _log_timing_note(f'rewrote "{query}" -> "{search_query}"')
+
+        t0 = time.perf_counter()
+        dense_results = self.dense.retrieve(search_query, top_k=candidate_k)
+        _log_timing("dense retrieve", time.perf_counter() - t0)
+
+        t1 = time.perf_counter()
+        sparse_results = self.sparse.retrieve(search_query, top_k=candidate_k)
+        _log_timing("sparse (BM25) retrieve", time.perf_counter() - t1)
+
+        t2 = time.perf_counter()
         fused = reciprocal_rank_fusion([dense_results, sparse_results], rrf_k=rrf_k)
+        _log_timing("RRF fusion", time.perf_counter() - t2)
 
         if not use_reranker:
             return fused[:top_k]
 
         from reranker import rerank
-        # Rerank a modest slice of the fused list (not all of it — reranking
-        # is the expensive step) then return the true top_k.
-        # Rerank the WHOLE fused list, not a re-sliced portion of it. `fused`
-        # is already bounded (at most 2*candidate_k unique chunks — dense's
-        # contribution + sparse's, minus overlap), and reranking that many
-        # is cheap. Re-slicing to candidate_k here was a real bug: a chunk
-        # found only by dense (correct match, but no BM25 keyword overlap)
-        # gets a modest RRF score and can get pushed below the candidate_k
-        # cutoff by chunks appearing in BOTH lists at moderate individual
-        # ranks — so the reranker never even saw the right answer. This is
-        # what caused hybrid_recall_at_k (0.778) to come in worse than
-        # dense_recall_at_k (0.972) in the first eval run.
-        return rerank(query, fused, top_k=top_k)
+        t3 = time.perf_counter()
+        result = rerank(search_query, fused, top_k=top_k)
+        _log_timing("rerank", time.perf_counter() - t3)
+        return result
 
-
+    def warmup(self) -> None:
+        """Forces the embedding model and cross-encoder reranker to load
+        NOW, in this call, rather than lazily on the first real user query.
+        Call this once at server startup (see api.py's lifespan) so the
+        first actual /query request isn't the one paying for model loading
+        — that's what turned a normal sub-second retrieval into an
+        apparent 43-second one in practice. use_query_rewrite=False here:
+        that step calls the Groq API, which has nothing to "warm up"
+        locally and would just waste a call."""
+        t0 = time.perf_counter()
+        self.retrieve("warmup query to force model loading", top_k=1,
+                       use_reranker=True, use_query_rewrite=False)
+        _log_timing("full warmup (dense + sparse + rerank model load)", time.perf_counter() - t0)
 if __name__ == "__main__":
     import argparse
 
@@ -104,10 +155,15 @@ if __name__ == "__main__":
     parser.add_argument("--strategy", default="sentence")
     parser.add_argument("--top_k", type=int, default=5)
     parser.add_argument("--no_rerank", action="store_true")
+    parser.add_argument("--no_rewrite", action="store_true")
     args = parser.parse_args()
 
     retriever = HybridRetriever(strategy=args.strategy)
-    results = retriever.retrieve(args.query, top_k=args.top_k, use_reranker=not args.no_rerank)
+    results = retriever.retrieve(
+        args.query, top_k=args.top_k,
+        use_reranker=not args.no_rerank,
+        use_query_rewrite=not args.no_rewrite,
+    )
     for i, r in enumerate(results, 1):
         print(f"\n[{i}] score={r.score:.3f} | {r.metadata['focus']} | source={r.metadata['source']}")
         print(f"    {r.chunk_text[:200]}...")

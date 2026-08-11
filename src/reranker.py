@@ -31,8 +31,20 @@ def get_reranker(model_name: str = DEFAULT_MODEL):
 def rerank(query: str, candidates: list[RetrievedChunk], top_k: int = 5,
            model_name: str = DEFAULT_MODEL) -> list[RetrievedChunk]:
     """Re-score `candidates` against `query` with a cross-encoder, return
-    the top_k re-sorted by the new score. Deduplicates by chunk_id first
-    (hybrid fusion can otherwise pass the same chunk to the reranker twice).
+    the top_k re-sorted by the new score.
+
+    Deduplicates on TWO levels:
+      1. chunk_id — hybrid fusion can pass the same chunk to the reranker
+         twice (once from dense, once from sparse).
+      2. chunk_text — MedQuAD itself has real duplicate content: different
+         QA pairs (different pair_uid, e.g. two adjacent source documents)
+         sometimes contain byte-identical answer text. Found via a real
+         eval case where two of the 5 returned "sources" for a metformin
+         question turned out to be verbatim-identical Hypoglycemia chunks
+         under two different pair_uids — wasting a citation slot on a
+         redundant duplicate instead of a potentially more useful 5th
+         source. chunk_id-only dedup can't catch this since the two
+         pair_uids are genuinely different ids.
 
     IMPORTANT: we feed the cross-encoder the chunk's *question + focus*
     context alongside its raw text, not chunk_text alone. Found via a real
@@ -50,12 +62,17 @@ def rerank(query: str, candidates: list[RetrievedChunk], top_k: int = 5,
     if not candidates:
         return []
 
-    seen = set()
+    seen_ids: set[str] = set()
+    seen_texts: set[str] = set()
     deduped = []
     for c in candidates:
-        if c.chunk_id not in seen:
-            seen.add(c.chunk_id)
-            deduped.append(c)
+        if c.chunk_id in seen_ids:
+            continue
+        if c.chunk_text in seen_texts:
+            continue
+        seen_ids.add(c.chunk_id)
+        seen_texts.add(c.chunk_text)
+        deduped.append(c)
 
     model = get_reranker(model_name)
     pairs = [
