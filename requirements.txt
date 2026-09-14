@@ -19,3 +19,9 @@ httpx==0.28.1
 # --- Step 8: frontend ---
 streamlit==1.60.0
 requests
+
+# --- Optional: only needed if LLM_PROVIDER is set to something other than
+# the default "groq" in .env. Uncomment whichever you use. ---
+# openai>=1.0          # needed for LLM_PROVIDER=openai AND LLM_PROVIDER=deepseek
+#                       # (deepseek's API is OpenAI-compatible, reuses this SDK)
+# anthropic>=0.40       # needed for LLM_PROVIDER=anthropic

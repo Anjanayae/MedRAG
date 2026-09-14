@@ -34,10 +34,16 @@ with st.sidebar:
     st.header("Settings")
     top_k = st.slider("Sources to retrieve (top_k)", min_value=1, max_value=10, value=5)
     use_reranker = st.checkbox("Use reranker", value=True)
+    use_verification = st.checkbox(
+        "Verify citations", value=False,
+        help="Independently checks each [N] citation against its source with a "
+             "second LLM-judge pass, and shows a composite confidence score "
+             "(retrieval + citation accuracy + source use). Costs extra API calls.",
+    )
     st.divider()
     st.caption(
-        "Backend: FastAPI + Chroma + BM25 + cross-encoder reranker + Groq "
-        "(llama-3.3-70b-versatile)."
+        "Backend: FastAPI + Chroma + BM25 + cross-encoder reranker + "
+        "LLM_PROVIDER-configured generation (default: Groq)."
     )
     if st.button("Clear chat"):
         st.session_state.messages = []
@@ -92,6 +98,7 @@ if prompt := st.chat_input("Ask a medical question..."):
                         "question": prompt,
                         "top_k": top_k,
                         "use_reranker": use_reranker,
+                        "use_verification": use_verification,
                     },
                     timeout=60,
                 )
@@ -104,6 +111,12 @@ if prompt := st.chat_input("Ask a medical question..."):
         st.markdown(data["answer"])
         if data["refused"]:
             st.info("⚠️ Low confidence — refused to answer rather than guess.")
+        if data.get("composite_confidence") is not None:
+            st.caption(
+                f"Composite confidence: {data['composite_confidence']:.2f} "
+                f"(retrieval + citation accuracy {data['citation_coverage']:.2f} "
+                f"+ source use {data['source_utilization']:.2f})"
+            )
 
         if data["sources"]:
             with st.expander(f"Sources ({len(data['sources'])}) · "
@@ -118,6 +131,11 @@ if prompt := st.chat_input("Ask a medical question..."):
                         f"*Original question: {src['question']}*  \n"
                         f"{url_line}"
                     )
+                if data.get("citation_checks"):
+                    st.markdown("**Citation verification:**")
+                    for c in data["citation_checks"]:
+                        icon = "✅" if c["supported"] else ("❌" if c["supported"] is False else "❓")
+                        st.markdown(f"{icon} [{c['marker']}] {c['claim_text']}")
 
     st.session_state.messages.append(
         {

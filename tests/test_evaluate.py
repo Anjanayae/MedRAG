@@ -18,6 +18,48 @@ def test_extract_pair_uid():
     assert eval_mod.extract_pair_uid("0000123::sentence::2") == "0000123"
 
 
+# --- key-fact recall (free, no LLM calls) ---
+
+def test_extract_key_terms_filters_short_and_stopwords():
+    terms = eval_mod.extract_key_terms("The patient has diabetes and needs insulin therapy.")
+    assert "diabetes" in [t.lower() for t in terms]
+    assert "insulin" in [t.lower() for t in terms]
+    assert "the" not in [t.lower() for t in terms]
+    assert "has" not in [t.lower() for t in terms]
+
+
+def test_extract_key_terms_keeps_numbers():
+    terms = eval_mod.extract_key_terms("Take 500 mg twice daily for 10 days.")
+    assert "500" in terms
+
+
+def test_extract_key_terms_caps_at_max_terms():
+    text = " ".join(f"uniqueword{i}" for i in range(30))
+    terms = eval_mod.extract_key_terms(text, max_terms=5)
+    assert len(terms) == 5
+
+
+def test_key_fact_recall_full_overlap():
+    gold = "Diabetes causes increased thirst and fatigue."
+    generated = "Diabetes is known to cause the same increased thirst and fatigue symptoms in patients, and diabetes causes weight loss too."
+    assert eval_mod.key_fact_recall(generated, gold) == 1.0
+
+
+def test_key_fact_recall_no_overlap():
+    gold = "Diabetes causes increased thirst and fatigue."
+    generated = "This response says nothing relevant at all."
+    assert eval_mod.key_fact_recall(generated, gold) == 0.0
+
+
+def test_key_fact_recall_none_when_gold_has_no_key_terms():
+    assert eval_mod.key_fact_recall("some answer", "is a to of") is None
+
+
+def test_load_gold_answer_returns_none_for_unknown_uid(tmp_path, monkeypatch):
+    monkeypatch.setattr(eval_mod, "_qa_answer_lookup", {})
+    assert eval_mod.load_gold_answer("does-not-exist") is None
+
+
 def test_recall_at_k_hit():
     chunks = [make_chunk("0000001"), make_chunk("0000002")]
     assert eval_mod.recall_at_k(chunks, "0000002") is True
@@ -104,7 +146,7 @@ def test_judge_calibration_check_passes_when_judge_scores_low(monkeypatch):
             return [make_chunk("GOLD1")]
 
     monkeypatch.setattr(eval_mod, "HybridRetriever", FakeHybrid)
-    monkeypatch.setattr(eval_mod, "call_groq", lambda prompt: '{"groundedness": 1, "relevance": 2}')
+    monkeypatch.setattr(eval_mod, "call_llm", lambda prompt: '{"groundedness": 1, "relevance": 2}')
 
     eval_items = [{"question": "real q", "type": "real", "gold_pair_uid": "GOLD1", "expects_refusal": False}]
     result = eval_mod.judge_calibration_check(eval_items, strategy="sentence")
@@ -126,7 +168,7 @@ def test_judge_calibration_check_fails_when_judge_too_lenient(monkeypatch):
 
     monkeypatch.setattr(eval_mod, "HybridRetriever", FakeHybrid)
     # Simulates a too-lenient judge giving a fabricated answer a perfect score
-    monkeypatch.setattr(eval_mod, "call_groq", lambda prompt: '{"groundedness": 5, "relevance": 5}')
+    monkeypatch.setattr(eval_mod, "call_llm", lambda prompt: '{"groundedness": 5, "relevance": 5}')
 
     eval_items = [{"question": "real q", "type": "real", "gold_pair_uid": "GOLD1", "expects_refusal": False}]
     result = eval_mod.judge_calibration_check(eval_items, strategy="sentence")
