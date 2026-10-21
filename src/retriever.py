@@ -31,12 +31,17 @@ class RetrievedChunk:
 
 
 class DenseRetriever:
-    def __init__(self, strategy: str = "sentence", model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(self, strategy: str = "sentence", model_name: str = "all-MiniLM-L6-v2",
+                 chroma_dir: Path | None = None):
+        """chroma_dir=None (default) uses the production CHROMA_DIR, exactly
+        as before — this param exists so a separate benchmark (see
+        eval_holdout.py) can point this at its own dedicated Chroma
+        directory instead, without ever touching the production index."""
         import chromadb
 
         self.strategy = strategy
         self.model_name = model_name
-        client = chromadb.PersistentClient(path=str(CHROMA_DIR))
+        client = chromadb.PersistentClient(path=str(chroma_dir or CHROMA_DIR))
         collection_name = f"medrag_{strategy}"
         try:
             self.collection = client.get_collection(collection_name)

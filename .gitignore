@@ -6,7 +6,8 @@ data/raw/MedQuAD/
 data/processed/*.jsonl
 data/processed/*.csv
 data/processed/chroma_db/
+data/eval/chroma_db_holdout/
 .env
 *.log
 .DS_Store
-README.md
+

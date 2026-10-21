@@ -151,3 +151,53 @@ def test_compute_source_utilization_counts_unique_cited_sources():
 def gen_citation_check(marker, source_index):
     from citation_verify import CitationCheck
     return CitationCheck(marker=marker, claim_text="x", source_index=source_index, supported=True)
+
+# --- contradiction detection integration ---
+
+def test_generate_answer_without_check_contradictions_leaves_field_none(monkeypatch):
+    monkeypatch.setattr(gen, "call_groq", lambda prompt, model: "Answer [1].")
+    result = gen.generate_answer("What is diabetes?", [make_chunk(score=10.0)])
+    assert result.contradictions is None
+
+
+def test_generate_answer_with_check_contradictions_no_conflicts_gives_empty_list(monkeypatch):
+    monkeypatch.setattr(gen, "call_groq", lambda prompt, model: "Answer [1].")
+    monkeypatch.setattr(
+        "contradiction_detection.call_llm",
+        lambda prompt: '[{"index": 0, "conflicting": false, "explanation": ""}]',
+    )
+    chunks = [make_chunk(score=10.0, text="Chunk A"), make_chunk(score=9.0, text="Chunk B")]
+    result = gen.generate_answer("What is diabetes?", chunks, check_contradictions=True)
+    assert result.contradictions == []
+
+
+def test_generate_answer_with_conflict_detected_injects_note_into_prompt(monkeypatch):
+    captured_prompts = []
+
+    def fake_call_groq(prompt, model):
+        captured_prompts.append(prompt)
+        return "Sources disagree on dosage [1][2]."
+
+    monkeypatch.setattr(gen, "call_groq", fake_call_groq)
+    monkeypatch.setattr(
+        "contradiction_detection.call_llm",
+        lambda prompt: '[{"index": 0, "conflicting": true, "explanation": "different dosage guidance"}]',
+    )
+    chunks = [make_chunk(score=10.0, text="Take 500mg."), make_chunk(score=9.0, text="Take 1000mg.")]
+    result = gen.generate_answer("dosage question", chunks, check_contradictions=True)
+
+    assert len(result.contradictions) == 1
+    assert result.contradictions[0]["explanation"] == "different dosage guidance"
+    assert "conflicting information" in captured_prompts[0]
+    assert "different dosage guidance" in captured_prompts[0]
+
+
+def test_refused_answers_never_run_contradiction_detection(monkeypatch):
+    def boom(*a, **kw):
+        raise AssertionError("contradiction detection should not run on a refused answer")
+    monkeypatch.setattr("contradiction_detection.find_contradictions", boom)
+
+    low_conf_chunk = make_chunk(score=-10.0)
+    result = gen.generate_answer("obscure query", [low_conf_chunk], check_contradictions=True)
+    assert result.refused is True
+    assert result.contradictions is None

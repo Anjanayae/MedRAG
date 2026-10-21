@@ -16,10 +16,15 @@ Run with:  streamlit run app.py
 
 from __future__ import annotations
 
+import os
+
 import requests
 import streamlit as st
 
-API_URL = "http://localhost:8000"
+# MEDRAG_API_URL lets this point at a non-localhost API (e.g. Docker
+# Compose, where the API container is reachable at http://api:8000, not
+# localhost) without touching code. Defaults to localhost for local runs.
+API_URL = os.environ.get("MEDRAG_API_URL", "http://localhost:8000")
 
 st.set_page_config(page_title="MedRAG", page_icon="🩺", layout="centered")
 
@@ -39,6 +44,13 @@ with st.sidebar:
         help="Independently checks each [N] citation against its source with a "
              "second LLM-judge pass, and shows a composite confidence score "
              "(retrieval + citation accuracy + source use). Costs extra API calls.",
+    )
+    check_contradictions = st.checkbox(
+        "Check for conflicting sources", value=False,
+        help="Checks whether the retrieved sources materially disagree (e.g. "
+             "different dosage guidance) before answering, and asks the model "
+             "to acknowledge the conflict explicitly if found. Costs one extra "
+             "API call.",
     )
     st.divider()
     st.caption(
@@ -99,6 +111,7 @@ if prompt := st.chat_input("Ask a medical question..."):
                         "top_k": top_k,
                         "use_reranker": use_reranker,
                         "use_verification": use_verification,
+                        "check_contradictions": check_contradictions,
                     },
                     timeout=60,
                 )
@@ -111,6 +124,12 @@ if prompt := st.chat_input("Ask a medical question..."):
         st.markdown(data["answer"])
         if data["refused"]:
             st.info("⚠️ Low confidence — refused to answer rather than guess.")
+        if data.get("contradictions"):
+            for c in data["contradictions"]:
+                st.warning(
+                    f"⚠️ Sources [{c['source_index_a']}] and [{c['source_index_b']}] may conflict: "
+                    f"{c['explanation']}"
+                )
         if data.get("composite_confidence") is not None:
             st.caption(
                 f"Composite confidence: {data['composite_confidence']:.2f} "

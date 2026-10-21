@@ -3,9 +3,11 @@ api.py — FastAPI backend.
 
   POST /query        retrieve (hybrid) -> rerank -> generate -> answer +
                       sources + confidence (optionally: citation
-                      verification + composite confidence)
-  GET  /documents     summary of what's currently indexed (source/topic
-                      breakdown), read from data/processed/qa_pairs.jsonl
+                      verification + composite confidence + contradiction
+                      detection)
+  GET  /documents     summary of what's ACTUALLY indexed right now, read
+                      from the LIVE Chroma collection (not a static file —
+                      see documents() docstring)
   POST /ingest        re-runs ingest -> chunk -> index for a strategy, in
                       the background, and hot-swaps the live retriever
                       when done — no server restart needed to pick up new
@@ -27,7 +29,6 @@ from __future__ import annotations
 
 import time
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
@@ -37,7 +38,6 @@ from hybrid_retriever import HybridRetriever
 
 _retriever: HybridRetriever | None = None
 DEFAULT_STRATEGY = "sentence"
-DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "processed"
 
 
 @asynccontextmanager
@@ -73,6 +73,9 @@ class QueryRequest(BaseModel):
     # Opt-in: costs one extra LLM-judge call per citation in the answer.
     # See generation.py's generate_answer() docstring.
     use_verification: bool = False
+    # Opt-in: costs one extra batched LLM-judge call comparing the
+    # retrieved chunks pairwise. See contradiction_detection.py.
+    check_contradictions: bool = False
 
 
 class QueryResponse(BaseModel):
@@ -88,6 +91,10 @@ class QueryResponse(BaseModel):
     citation_coverage: float | None = None
     source_utilization: float | None = None
     composite_confidence: float | None = None
+    # Populated only when check_contradictions=True was requested: None if
+    # not checked, [] if checked with no conflicts found, non-empty list if
+    # conflicts were found (and the model was told about them in its prompt).
+    contradictions: list[dict] | None = None
 
 
 class IngestRequest(BaseModel):
@@ -110,34 +117,42 @@ def health():
 
 @app.get("/documents")
 def documents(source: str | None = Query(default=None, description="Filter to one source, e.g. 'NIDDK'")):
-    """Summary of what's currently indexed — reads data/processed/qa_pairs.jsonl
-    (the output of ingest.py), not the Chroma/BM25 indexes directly, since
-    that file is the single source of truth both indexes are built from
-    (see index.py / chunking.py docstrings)."""
-    qa_path = DATA_DIR / "qa_pairs.jsonl"
-    if not qa_path.exists():
-        raise HTTPException(
-            status_code=404,
-            detail=f"{qa_path} not found. Run ingest first (see POST /ingest).",
-        )
+    """Summary of what's ACTUALLY indexed right now — reads the LIVE Chroma
+    collection via the currently-loaded retriever (_retriever.dense.collection),
+    not a static file. This can't drift from reality the way reading
+    qa_pairs.jsonl could: if dedupe.py removed chunks and index.py was
+    rerun, this reflects that immediately; if chunking/dedup/index steps
+    are out of sync, this still reports what's truly queryable right now,
+    not what an intermediate pipeline file claims.
 
-    import json
-    from collections import Counter
+    Reports per-CHUNK counts (a single QA pair can produce multiple
+    indexed chunks depending on chunking strategy), not per-QA-pair counts
+    — a real semantic difference from the old file-based version: "how
+    many QA pairs were ingested" and "how many chunks are actually
+    retrievable right now" are different numbers, and the retrievable-
+    chunk count is the one that matches what /query can actually return."""
+    if _retriever is None:
+        raise HTTPException(status_code=503, detail="Retriever not initialized")
+
+    collection = _retriever.dense.collection
+    where = {"source": source} if source else None
+    result = collection.get(where=where, include=["metadatas"])
+    metadatas = result.get("metadatas") or []
+
+    if not metadatas:
+        detail = "No chunks found in the live index"
+        detail += f" for source '{source}'." if source else ". Has the index been built?"
+        detail += " See README 'Ingest data' / POST /ingest."
+        raise HTTPException(status_code=404, detail=detail)
 
     doc_ids = set()
     focuses_by_source: dict[str, set] = {}
-    total = 0
-    with open(qa_path, encoding="utf-8") as f:
-        for line in f:
-            row = json.loads(line)
-            if source and row["source"] != source:
-                continue
-            total += 1
-            doc_ids.add(row["doc_id"])
-            focuses_by_source.setdefault(row["source"], set()).add(row["focus"])
+    for m in metadatas:
+        doc_ids.add(m["doc_id"])
+        focuses_by_source.setdefault(m["source"], set()).add(m["focus"])
 
     return {
-        "total_qa_pairs": total,
+        "total_chunks_indexed": len(metadatas),
         "unique_documents": len(doc_ids),
         "sources": {
             src: {"unique_topics": len(focuses), "sample_topics": sorted(focuses)[:10]}
@@ -218,6 +233,7 @@ def query(request: QueryRequest):
     result = generate_answer(
         request.question, retrieved, model=request.model,
         verify_citations=request.use_verification,
+        check_contradictions=request.check_contradictions,
     )
     generation_time_ms = (time.perf_counter() - t1) * 1000
 
@@ -233,6 +249,7 @@ def query(request: QueryRequest):
         citation_coverage=result.citation_coverage,
         source_utilization=result.source_utilization,
         composite_confidence=result.composite_confidence,
+        contradictions=result.contradictions,
     )
 
 

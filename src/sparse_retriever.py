@@ -35,16 +35,23 @@ def tokenize(text: str) -> list[str]:
 
 
 class BM25Retriever:
-    def __init__(self, strategy: str = "sentence"):
+    def __init__(self, strategy: str = "sentence", chunks: list[dict] | None = None):
+        """chunks=None (default) reads the production chunks_<strategy>.jsonl
+        file, exactly as before. Pass an explicit list to index over an
+        arbitrary in-memory chunk set instead (see eval_holdout.py) without
+        touching that file at all."""
         self.strategy = strategy
-        chunks_path = DATA_DIR / f"chunks_{strategy}.jsonl"
-        if not chunks_path.exists():
-            raise FileNotFoundError(
-                f"{chunks_path} not found — run `python src/chunking.py` first."
-            )
 
-        with open(chunks_path, encoding="utf-8") as f:
-            self.chunks = [json.loads(line) for line in f]
+        if chunks is not None:
+            self.chunks = chunks
+        else:
+            chunks_path = DATA_DIR / f"chunks_{strategy}.jsonl"
+            if not chunks_path.exists():
+                raise FileNotFoundError(
+                    f"{chunks_path} not found — run `python src/chunking.py` first."
+                )
+            with open(chunks_path, encoding="utf-8") as f:
+                self.chunks = [json.loads(line) for line in f]
 
         # Index on question + chunk_text (same fields dense embeds) so both
         # retrievers see comparable content.

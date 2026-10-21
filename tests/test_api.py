@@ -73,7 +73,7 @@ def test_query_endpoint_verification_off_by_default_leaves_new_fields_none(clien
 
 
 def test_query_endpoint_with_verification_populates_new_fields(client, monkeypatch):
-    monkeypatch.setattr("citation_verify.call_llm", lambda prompt: '{"supported": true, "reason": "ok"}')
+    monkeypatch.setattr("citation_verify.call_llm", lambda prompt: '[{"index": 0, "supported": true, "reason": "ok"}]')
     resp = client.post("/query", json={
         "question": "What are diabetes symptoms?", "use_verification": True,
     })
@@ -83,50 +83,110 @@ def test_query_endpoint_with_verification_populates_new_fields(client, monkeypat
     assert body["citation_coverage"] is not None
 
 
-def test_documents_endpoint_404_when_no_data(client, tmp_path, monkeypatch):
-    monkeypatch.setattr("api.DATA_DIR", tmp_path)
+def test_query_endpoint_contradictions_off_by_default_leaves_field_none(client):
+    resp = client.post("/query", json={"question": "What are diabetes symptoms?"})
+    body = resp.json()
+    assert body["contradictions"] is None
+
+
+def test_query_endpoint_with_contradiction_check_but_single_chunk_gives_empty_list(client, monkeypatch):
+    # FakeRetriever only returns 1 chunk -- find_contradictions short-circuits
+    # (needs >=2 to compare), so contradictions should be [] (checked, none
+    # possible), not None (not checked at all).
+    def boom(prompt):
+        raise AssertionError("should not call the judge with fewer than 2 chunks")
+    monkeypatch.setattr("contradiction_detection.call_llm", boom)
+
+    resp = client.post("/query", json={
+        "question": "What are diabetes symptoms?", "check_contradictions": True,
+    })
+    assert resp.status_code == 200
+    assert resp.json()["contradictions"] == []
+
+
+def test_query_endpoint_with_contradiction_check_populates_field(client, monkeypatch):
+    class TwoChunkRetriever:
+        def retrieve(self, query, top_k=5, use_reranker=True):
+            return [
+                RetrievedChunk(chunk_id="c1", chunk_text="Take 500mg.", score=8.0,
+                                metadata={"focus": "Diabetes", "source": "NIDDK", "url": "u1", "question": "q"}),
+                RetrievedChunk(chunk_id="c2", chunk_text="Take 1000mg.", score=7.0,
+                                metadata={"focus": "Diabetes", "source": "NIDDK", "url": "u2", "question": "q"}),
+            ]
+    monkeypatch.setattr("api._retriever", TwoChunkRetriever())
+    monkeypatch.setattr(
+        "contradiction_detection.call_llm",
+        lambda prompt: '[{"index": 0, "conflicting": true, "explanation": "dosage differs"}]',
+    )
+    resp = client.post("/query", json={
+        "question": "What are diabetes symptoms?", "check_contradictions": True,
+    })
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["contradictions"] is not None
+    assert body["contradictions"][0]["explanation"] == "dosage differs"
+
+
+class FakeCollection:
+    """Stands in for a Chroma collection's .get() -- enough to exercise
+    the /documents endpoint's aggregation logic without real Chroma."""
+    def __init__(self, metadatas):
+        self._metadatas = metadatas
+
+    def get(self, where=None, include=None):
+        if where and "source" in where:
+            filtered = [m for m in self._metadatas if m["source"] == where["source"]]
+        else:
+            filtered = self._metadatas
+        return {"metadatas": filtered}
+
+
+class FakeRetrieverWithDense:
+    def __init__(self, metadatas):
+        self.dense = type("_", (), {"collection": FakeCollection(metadatas)})()
+
+
+def test_documents_endpoint_404_when_index_empty(client, monkeypatch):
+    monkeypatch.setattr("api._retriever", FakeRetrieverWithDense([]))
     resp = client.get("/documents")
     assert resp.status_code == 404
 
 
-def test_documents_endpoint_summarizes_qa_pairs(client, tmp_path, monkeypatch):
-    import json
-    qa_path = tmp_path / "qa_pairs.jsonl"
-    rows = [
+def test_documents_endpoint_503_when_retriever_not_loaded(client, monkeypatch):
+    monkeypatch.setattr("api._retriever", None)
+    resp = client.get("/documents")
+    assert resp.status_code == 503
+
+
+def test_documents_endpoint_summarizes_live_index(client, monkeypatch):
+    metadatas = [
         {"doc_id": "d1", "source": "NIDDK", "focus": "Diabetes"},
+        {"doc_id": "d1", "source": "NIDDK", "focus": "Diabetes"},  # 2nd chunk, same doc
         {"doc_id": "d2", "source": "NIDDK", "focus": "Asthma"},
         {"doc_id": "d3", "source": "CDC", "focus": "Flu"},
     ]
-    with open(qa_path, "w", encoding="utf-8") as f:
-        for r in rows:
-            f.write(json.dumps(r) + "\n")
-    monkeypatch.setattr("api.DATA_DIR", tmp_path)
+    monkeypatch.setattr("api._retriever", FakeRetrieverWithDense(metadatas))
 
     resp = client.get("/documents")
     assert resp.status_code == 200
     body = resp.json()
-    assert body["total_qa_pairs"] == 3
+    assert body["total_chunks_indexed"] == 4  # per-chunk, not per-document
     assert body["unique_documents"] == 3
     assert set(body["sources"].keys()) == {"NIDDK", "CDC"}
     assert body["sources"]["NIDDK"]["unique_topics"] == 2
 
 
-def test_documents_endpoint_filters_by_source(client, tmp_path, monkeypatch):
-    import json
-    qa_path = tmp_path / "qa_pairs.jsonl"
-    rows = [
+def test_documents_endpoint_filters_by_source(client, monkeypatch):
+    metadatas = [
         {"doc_id": "d1", "source": "NIDDK", "focus": "Diabetes"},
         {"doc_id": "d2", "source": "CDC", "focus": "Flu"},
     ]
-    with open(qa_path, "w", encoding="utf-8") as f:
-        for r in rows:
-            f.write(json.dumps(r) + "\n")
-    monkeypatch.setattr("api.DATA_DIR", tmp_path)
+    monkeypatch.setattr("api._retriever", FakeRetrieverWithDense(metadatas))
 
     resp = client.get("/documents", params={"source": "NIDDK"})
     assert resp.status_code == 200
     body = resp.json()
-    assert body["total_qa_pairs"] == 1
+    assert body["total_chunks_indexed"] == 1
     assert set(body["sources"].keys()) == {"NIDDK"}
 
 

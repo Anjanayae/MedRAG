@@ -96,6 +96,11 @@ class GenerationResult:
     citation_coverage: float | None = None
     source_utilization: float | None = None
     composite_confidence: float | None = None
+    # --- contradiction detection (populated only when check_contradictions=
+    # True is passed to generate_answer(); None if not checked, [] if
+    # checked and none found, non-empty list if conflicts were found and
+    # the model was told about them in its prompt) ---
+    contradictions: list[dict] | None = None
 
 
 def sigmoid(x: float) -> float:
@@ -356,6 +361,7 @@ def generate_answer(
     model: str | None = None,
     confidence_threshold: float = RERANK_CONFIDENCE_THRESHOLD,
     verify_citations: bool = False,
+    check_contradictions: bool = False,
 ) -> GenerationResult:
     """model=None (default) means "use whatever LLM_PROVIDER is configured,
     with that provider's own default model" — see call_llm(). Pass an
@@ -370,7 +376,16 @@ def generate_answer(
     citation_coverage, source_utilization, and composite_confidence
     populated on the result. The existing pre-generation refusal gate
     (check_confidence, right below) is completely unaffected either way —
-    verification only ever runs AFTER an answer is already generated."""
+    verification only ever runs AFTER an answer is already generated.
+
+    check_contradictions=False by default: costs one extra LLM-judge call
+    (contradiction_detection.find_contradictions, batched over all pairs
+    among the retrieved chunks — see that module). Unlike citation
+    verification, this runs BEFORE generation: if the top retrieved chunks
+    materially conflict, a short note is appended to the PROMPT (not the
+    system prompt — so this doesn't change behavior for any request that
+    doesn't opt in) instructing the model to acknowledge the conflict
+    explicitly instead of silently picking one source's version."""
     confidence, refused = check_confidence(retrieved_chunks, confidence_threshold)
     provider = os.environ.get("LLM_PROVIDER", "groq").lower()
     resolved_model = model or DEFAULT_MODEL_BY_PROVIDER.get(provider, DEFAULT_GROQ_MODEL)
@@ -384,8 +399,15 @@ def generate_answer(
             model=resolved_model,
         )
 
+    contradiction_flags = []
+    if check_contradictions:
+        from contradiction_detection import find_contradictions, summarize_contradictions
+        contradiction_flags = find_contradictions(retrieved_chunks)
+
     context_block = build_context_block(retrieved_chunks)
     prompt = f"Sources:\n{context_block}\n\nQuestion: {query}"
+    if contradiction_flags:
+        prompt += summarize_contradictions(contradiction_flags)
     answer_text = call_llm(prompt, model=model, provider=provider)
 
     result = GenerationResult(
@@ -395,6 +417,12 @@ def generate_answer(
         refused=False,
         model=resolved_model,
     )
+
+    if check_contradictions:
+        result.contradictions = [
+            {"source_index_a": f.source_index_a, "source_index_b": f.source_index_b, "explanation": f.explanation}
+            for f in contradiction_flags
+        ]
 
     if verify_citations:
         from citation_verify import (

@@ -57,12 +57,56 @@ def test_verify_answer_citations_flags_missing_index_without_llm_call(monkeypatc
 
 
 def test_verify_answer_citations_calls_judge_for_valid_index(monkeypatch):
-    monkeypatch.setattr(cv, "call_llm", lambda prompt: '{"supported": true, "reason": "ok"}')
+    monkeypatch.setattr(cv, "call_llm", lambda prompt: '[{"index": 0, "supported": true, "reason": "ok"}]')
     answer = "Diabetes causes thirst [1]."
     checks = cv.verify_answer_citations(answer, chunk_texts={1: "Diabetes is associated with excessive thirst."})
     assert len(checks) == 1
     assert checks[0].supported is True
     assert checks[0].source_index == 1
+
+
+def test_verify_answer_citations_uses_exactly_one_llm_call_for_multiple_citations(monkeypatch):
+    calls = []
+
+    def fake_call_llm(prompt):
+        calls.append(prompt)
+        return '[{"index": 0, "supported": true, "reason": "a"}, {"index": 1, "supported": false, "reason": "b"}]'
+
+    monkeypatch.setattr(cv, "call_llm", fake_call_llm)
+    answer = "Diabetes causes thirst [1]. It also causes fatigue [2]."
+    checks = cv.verify_answer_citations(
+        answer, chunk_texts={1: "Diabetes causes thirst.", 2: "Unrelated text about something else."}
+    )
+    assert len(calls) == 1
+    assert len(checks) == 2
+    assert checks[0].supported is True
+    assert checks[1].supported is False
+
+
+def test_verify_answer_citations_batch_parse_failure_marks_all_unresolved(monkeypatch):
+    monkeypatch.setattr(cv, "call_llm", lambda prompt: "not valid json")
+    answer = "Diabetes causes thirst [1]. It also causes fatigue [2]."
+    checks = cv.verify_answer_citations(
+        answer, chunk_texts={1: "Diabetes causes thirst.", 2: "Fatigue is common."}
+    )
+    assert len(checks) == 2
+    assert all(c.supported is None for c in checks)
+
+
+def test_verify_answer_citations_missing_index_and_valid_index_do_not_share_llm_call_count(monkeypatch):
+    calls = []
+
+    def fake_call_llm(prompt):
+        calls.append(prompt)
+        return '[{"index": 0, "supported": true, "reason": "ok"}]'
+
+    monkeypatch.setattr(cv, "call_llm", fake_call_llm)
+    answer = "First claim [9]. Second claim [1]."
+    checks = cv.verify_answer_citations(answer, chunk_texts={1: "Second claim source text."})
+    assert len(calls) == 1
+    assert checks[0].supported is False
+    assert checks[0].raw_judge_response == "cited index not in sources list"
+    assert checks[1].supported is True
 
 
 def test_citation_coverage_empty_checks_returns_full_credit():
@@ -78,9 +122,7 @@ def test_citation_coverage_mixed_results():
 
 
 def test_citation_coverage_all_unparseable_gives_half_credit():
-    checks = [
-        cv.CitationCheck(marker=1, claim_text="a", source_index=1, supported=None),
-    ]
+    checks = [cv.CitationCheck(marker=1, claim_text="a", source_index=1, supported=None)]
     assert cv.citation_coverage(checks) == 0.5
 
 
@@ -95,7 +137,5 @@ def test_uncited_claim_fraction_none_cited():
 
 
 def test_uncited_claim_fraction_ignores_trivial_sentences():
-    # Short filler sentences (<=3 words) shouldn't count as "substantive
-    # claims" that need a citation.
     answer = "Sure. Diabetes causes increased thirst [1]."
     assert cv.uncited_claim_fraction(answer) == 0.0

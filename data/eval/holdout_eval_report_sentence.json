@@ -1,0 +1,373 @@
+{
+  "strategy": "sentence",
+  "top_k": 5,
+  "n_dev_doc_ids": 2964,
+  "n_heldout_doc_ids": 523,
+  "n_heldout_items": 36,
+  "dense_recall_at_k": 0.944,
+  "hybrid_recall_at_k": 0.972,
+  "dense_mrr": 0.801,
+  "hybrid_mrr": 0.912,
+  "per_item": [
+    {
+      "question": "How to diagnose Parasites - Baylisascaris infection ?",
+      "gold_pair_uid": "0016335",
+      "gold_doc_id": "0000344",
+      "gold_source": "CDC",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Parasites - American Trypanosomiasis (also known as Chagas Disease) ?",
+      "gold_pair_uid": "0016194",
+      "gold_doc_id": "0000091",
+      "gold_source": "CDC",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "Who is at risk for Acanthamoeba - Granulomatous Amebic Encephalitis (GAE); Keratitis? ?",
+      "gold_pair_uid": "0016138",
+      "gold_doc_id": "0000001",
+      "gold_source": "CDC",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "Who is at risk for Hendra Virus Disease (HeV)? ?",
+      "gold_pair_uid": "0016242",
+      "gold_doc_id": "0000228",
+      "gold_source": "CDC",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 0.5
+    },
+    {
+      "question": "What are the symptoms of Chronic Myelomonocytic Leukemia ?",
+      "gold_pair_uid": "0000306",
+      "gold_doc_id": "0000013_3",
+      "gold_source": "CancerGov",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the treatments for Myelodysplastic/ Myeloproliferative Neoplasms ?",
+      "gold_pair_uid": "0000303",
+      "gold_doc_id": "0000013_3",
+      "gold_source": "CancerGov",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.5,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "what research (or clinical trials) is being done for Childhood Rhabdomyosarcoma ?",
+      "gold_pair_uid": "0000076",
+      "gold_doc_id": "0000003_4",
+      "gold_source": "CancerGov",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "How to diagnose Male Breast Cancer ?",
+      "gold_pair_uid": "0000555",
+      "gold_doc_id": "0000027_2",
+      "gold_source": "CancerGov",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the symptoms of Cardiac valvular dysplasia, X-linked ?",
+      "gold_pair_uid": "0001413",
+      "gold_doc_id": "0000941",
+      "gold_source": "GARD",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the symptoms of Tetraploidy ?",
+      "gold_pair_uid": "0005621",
+      "gold_doc_id": "0006048",
+      "gold_source": "GARD",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Polycystic liver disease ?",
+      "gold_pair_uid": "0004773",
+      "gold_doc_id": "0004945",
+      "gold_source": "GARD",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the symptoms of Brachydactyly type A2 ?",
+      "gold_pair_uid": "0001316",
+      "gold_doc_id": "0000810",
+      "gold_source": "GARD",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) trichohepatoenteric syndrome ?",
+      "gold_pair_uid": "0010993",
+      "gold_doc_id": "0000990",
+      "gold_source": "GHR",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the genetic changes related to microvillus inclusion disease ?",
+      "gold_pair_uid": "0009345",
+      "gold_doc_id": "0000657",
+      "gold_source": "GHR",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.5,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the treatments for African iron overload ?",
+      "gold_pair_uid": "0006242",
+      "gold_doc_id": "0000026",
+      "gold_source": "GHR",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the genetic changes related to African iron overload ?",
+      "gold_pair_uid": "0006240",
+      "gold_doc_id": "0000026",
+      "gold_source": "GHR",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Behcet's Syndrome ?",
+      "gold_pair_uid": "0011632",
+      "gold_doc_id": "0000085",
+      "gold_source": "MPlusHealthTopics",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.5,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Digestive Diseases ?",
+      "gold_pair_uid": "0011835",
+      "gold_doc_id": "0000288",
+      "gold_source": "MPlusHealthTopics",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Esophagus Disorders ?",
+      "gold_pair_uid": "0011884",
+      "gold_doc_id": "0000337",
+      "gold_source": "MPlusHealthTopics",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "Do you have information about Teens' Page",
+      "gold_pair_uid": "0012426",
+      "gold_doc_id": "0000879",
+      "gold_source": "MPlusHealthTopics",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "How to prevent Alpha-1 Antitrypsin Deficiency ?",
+      "gold_pair_uid": "0015584",
+      "gold_doc_id": "0000001",
+      "gold_source": "NHLBI",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the symptoms of Vasculitis ?",
+      "gold_pair_uid": "0016128",
+      "gold_doc_id": "0000136",
+      "gold_source": "NHLBI",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "Who is at risk for Coronary Heart Disease? ?",
+      "gold_pair_uid": "0015721",
+      "gold_doc_id": "0000044",
+      "gold_source": "NHLBI",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "How to prevent Thalassemias ?",
+      "gold_pair_uid": "0016096",
+      "gold_doc_id": "0000127",
+      "gold_source": "NHLBI",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.333,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the complications of Inguinal Hernia ?",
+      "gold_pair_uid": "0012949",
+      "gold_doc_id": "0000110",
+      "gold_source": "NIDDK",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Financial Help for Diabetes Care ?",
+      "gold_pair_uid": "0012699",
+      "gold_doc_id": "0000036",
+      "gold_source": "NIDDK",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What are the symptoms of Viral Gastroenteritis ?",
+      "gold_pair_uid": "0013037",
+      "gold_doc_id": "0000123",
+      "gold_source": "NIDDK",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What causes Nephrotic Syndrome in Adults ?",
+      "gold_pair_uid": "0013306",
+      "gold_doc_id": "0000161",
+      "gold_source": "NIDDK",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.5,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Gum (Periodontal) Disease ?",
+      "gold_pair_uid": "0015107",
+      "gold_doc_id": "0000029",
+      "gold_source": "NIHSeniorHealth",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.5,
+      "hybrid_reciprocal_rank": 0.333
+    },
+    {
+      "question": "What is (are) Stroke ?",
+      "gold_pair_uid": "0015532",
+      "gold_doc_id": "0000066",
+      "gold_source": "NIHSeniorHealth",
+      "dense_hit": true,
+      "hybrid_hit": false,
+      "dense_reciprocal_rank": 0.25,
+      "hybrid_reciprocal_rank": 0.0
+    },
+    {
+      "question": "What is (are) Urinary Tract Infections ?",
+      "gold_pair_uid": "0015573",
+      "gold_doc_id": "0000071",
+      "gold_source": "NIHSeniorHealth",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.25,
+      "hybrid_reciprocal_rank": 0.5
+    },
+    {
+      "question": "Who is at risk for Age-related Macular Degeneration? ?",
+      "gold_pair_uid": "0014810",
+      "gold_doc_id": "0000001",
+      "gold_source": "NIHSeniorHealth",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.5,
+      "hybrid_reciprocal_rank": 0.5
+    },
+    {
+      "question": "What is (are) Pseudotumor Cerebri ?",
+      "gold_pair_uid": "0013889",
+      "gold_doc_id": "0000045",
+      "gold_source": "NINDS",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is (are) Learning Disabilities ?",
+      "gold_pair_uid": "0014413",
+      "gold_doc_id": "0000177",
+      "gold_source": "NINDS",
+      "dense_hit": true,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 1.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "what research (or clinical trials) is being done for Fabry Disease ?",
+      "gold_pair_uid": "0014200",
+      "gold_doc_id": "0000123",
+      "gold_source": "NINDS",
+      "dense_hit": false,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.0,
+      "hybrid_reciprocal_rank": 1.0
+    },
+    {
+      "question": "What is the outlook for Cushing's Syndrome ?",
+      "gold_pair_uid": "0014071",
+      "gold_doc_id": "0000091",
+      "gold_source": "NINDS",
+      "dense_hit": false,
+      "hybrid_hit": true,
+      "dense_reciprocal_rank": 0.0,
+      "hybrid_reciprocal_rank": 1.0
+    }
+  ]
+}

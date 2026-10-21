@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import os
 import time
+from pathlib import Path
 
 from retriever import DenseRetriever, RetrievedChunk
 from sparse_retriever import BM25Retriever
@@ -80,9 +81,15 @@ def reciprocal_rank_fusion(
 
 
 class HybridRetriever:
-    def __init__(self, strategy: str = "sentence", model_name: str = "all-MiniLM-L6-v2"):
-        self.dense = DenseRetriever(strategy=strategy, model_name=model_name)
-        self.sparse = BM25Retriever(strategy=strategy)
+    def __init__(self, strategy: str = "sentence", model_name: str = "all-MiniLM-L6-v2",
+                 chroma_dir: Path | None = None, chunks: list[dict] | None = None):
+        """chroma_dir/chunks=None (default) use the production index/chunk
+        file, exactly as before — see DenseRetriever/BM25Retriever. Passed
+        through so a benchmark corpus can be swapped in for both underlying
+        retrievers at once without touching production data (see
+        eval_holdout.py)."""
+        self.dense = DenseRetriever(strategy=strategy, model_name=model_name, chroma_dir=chroma_dir)
+        self.sparse = BM25Retriever(strategy=strategy, chunks=chunks)
 
     def retrieve(
         self,
